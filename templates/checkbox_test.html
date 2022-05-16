@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+</head>
+<body>
+
+
+
+<div id="checkbox-container">
+
+<form name="checkfrm" action="/checkbox_test" method="POST" id='boxform'>
+
+    <p>
+    <input id="output" name="check_list" placeholder="セット結果">
+  </p>
+
+
+<table>
+    <tbody>
+
+    <tr>
+        <th><input type="checkbox" id="checkall" /></th>
+        <th>ID</th>
+
+    </tr>
+
+      {% for row in rows %}
+        <tr>
+          <!-- レコード番号を表示 -->
+<!--        <td>{{ loop.index + pagination.skip }}</td>-->
+            <td><input type="checkbox" id="check"  name="checkbox" class="checkbox" value="{{ row.index }}"></td>
+            <td>{{ row.index }}</td>
+
+
+        </tr>
+      {% endfor %}
+
+    </tbody>
+  </table>
+
+  <!-- ページネーションを中央揃えで表示 -->
+  <div style="text-align: center;">
+    {{ pagination.links }}
+  </div>
+
+    <p></p>
+    <button id="form_set" type="button">セット</button>
+    <button id="delete" type="button">リセット</button>
+<button type="submit" onClick="return checks();">登録</button>
+</form>
+
+</div>
+
+<script>
+
+
+
+
+    // チェックボックスのdom格納
+    const checkbox = document.querySelectorAll('[name="checkbox"]')
+    // セットボタンのdom格納
+    const set_btn = document.querySelector("#form_set")
+    // 削除ボタンのdom格納
+    const deletebtn = document.querySelector("#delete")
+    // 登録ボタンのdom格納
+    const registerbtn = document.querySelector("#submit")
+
+
+/*
+1. チェックボックスを付けたり消したりしたら、local storageに保存。
+keyはidと紐づけて一意になるので、何度やっても重複にはならないのでご安心。
+*/
+function save_local(){
+    for (let item of checkbox) {
+	    item.addEventListener('change', function () {
+        const stname = "checkbox" + item.value
+        localStorage.setItem(stname,item.checked)
+			// document.querySelector('#output').innerHTML = `${item.value} : ${item.checked}`;
+		});
+}
+}
+
+
+// 2. チェックの付いたidのoutputフィールドにリストを表示する。
+function set_to_form(){
+
+local_checked_list = [];
+
+ for( var key in localStorage ){
+     target_var = localStorage.getItem(key)
+
+     if (target_var == "true"){
+        let target_key = key.replace("checkbox", "");
+        local_checked_list.push(target_key)
+     }
+
+    }
+    document.getElementById("output").value = local_checked_list;
+}
+
+// 3.ローカルストレージにある値をフォームに渡す。
+function display_to_form(){
+
+  for(let item of checkbox){
+  // stname: ex.  checkbox1, checkbox2, checkbox3
+  const stname = "checkbox" + item.value
+  console.log(stname);
+  let bool = localStorage.getItem(stname)
+  if(bool == "false") bool = false // 文字列の"false"をfalseに直す
+  item.checked = bool // checkedに文字列が渡されるとチェックマークが付く
+}
+
+}
+
+// 6. submitチェック
+
+function checks() {
+    alert("checksの中");
+    set_to_form();
+    localStorage.clear()
+    return true;
+}
+
+
+
+
+// 4.消去を押したらローカルストレージの値を消去する。
+
+function delete_storage(){
+    deletebtn.addEventListener("click",function(){
+    //localStorage.removeItem("key");
+    localStorage.clear()
+    document.getElementById("output").value = "";
+    // チェックボックスに反映
+    display_to_form();
+})
+}
+
+// 関数実行
+save_local();
+//set_to_form();
+display_to_form();
+delete_storage();
+
+    let previousURL = document.referrer;
+    console.log(previousURL);
+    alert(previousURL);
+
+    // 遷移前の"checkbox_test"が含まれていなければ、local storageを削除する。
+    let urlCheck = previousURL.indexOf('checkbox_test');
+    console.log(urlCheck);
+    if (urlCheck == -1){
+        localStorage.clear();
+        set_to_form();
+    }
+
+
+
+</script>
+
+</body>
+</html>

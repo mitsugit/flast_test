@@ -1,0 +1,32 @@
+
+<button type="button" onclick="location.href='http://127.0.0.1:5000/checkbox_test'">ページリンク</button>
+
+    <table>
+    <tr>
+        <th>選択</th>
+        <th>first_name</th>
+        <th>last_name</th>
+    </tr>
+
+{% if datas %}
+
+{% for data in datas %}
+
+
+
+    <tr>
+        <td><input type="checkbox" value="{{ data.get('index') }}"></td>
+        <td>{{ data.get('first_name') }}</td>
+
+        <td>{{ data.get('last_name') }}</td>
+
+
+    <td><a href="/edit/{{ data.get('index') }}"  class="button">編集</a></td>
+    </tr>
+
+{% endfor %}
+{% endif %}
+
+            </table>
+
+

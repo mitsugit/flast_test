@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8">
+        <title>Edit</title>
+<!--        <link rel="stylesheet" href="/static/style.css">-->
+    </head>
+    <body>
+        <h1>{{ title }}</h1>
+
+        <form action="/update" method="POST">
+            <input type="" name="id" value="{{ data.get('index') }}">
+            <label>
+                タイトル：<input type="text" name="first_name" value="{{ data.get('first_name') }}">
+            </label>
+            <p></p>
+            <label>
+                タイトル：<input type="text" name="last_name" value="{{ data.get('last_name') }}">
+            </label>
+            <p></p>
+            <label>
+                タイトル：<input type="text" name="email" value="{{ data.get('email') }}">
+            </label>
+            <p></p>
+            <label>
+                タイトル：<input type="text" name="gender" value="{{ data.get('gender') }}">
+            </label>
+            <p></p>
+            <label>
+                タイトル：<input type="text" name="data_of_birth" value="{{ data.get('data_of_birth') }}">
+            </label>
+            <p></p>
+            <label>
+                タイトル：<input type="text" name="country_of_birth" value="{{ data.get('country_of_birth') }}">
+            </label>
+            <p></p>
+
+
+            <p></p>
+            <button type="submit">送信</button>
+        </form>
+        <p><a href="/">一覧画面に戻る</a></p>
+    </body>
+</html>
