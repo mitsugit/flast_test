@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous"> -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>Document</title>
+</head>
+<body>
+
+<form action="/filter_test" method="GET">
+  <input name="ordertest" value="ordertest">
+  <input name="order" id="order" value="{{ order }}">
+  <!-- <input id="jq1" class="jq1" placeholder="jq1" value="">
+  <input id="jq2" class="jq2" placeholder="jq2" value=""> -->
+  <input id="subtest" onchange="submit(this.form)">
+</form>
+
+<!-- <button id="jqtest" type="button">jqテスト</button> -->
+
+<div id="checkbox-container">
+
+<form name="checkfrm" action="/checkbox_test" method="POST" id='boxform'>
+
+    <p>
+    <input id="output" name="check_list" placeholder="セット結果">
+  </p>
+
+<div class="box1 col-md-8 mt-5">
+
+<table class="table table-striped table-bordered table-hover" >
+    <tbody>
+
+    <tr>
+        <th style="width: 5%"><input type="checkbox" id="checkall" /></th>
+        <th style="width: 40%" id="filter_test">ID</th>
+
+    </tr>
+
+      {% for row in rows %}
+        <tr>
+          <!-- レコード番号を表示 -->
+<!--        <td>{{ loop.index + pagination.skip }}</td>-->
+            <td><input type="checkbox" id="check"  name="checkbox" class="checkbox" value="{{ row.index }}"></td>
+            <td>{{ row.index }}</td>
+
+
+        </tr>
+      {% endfor %}
+
+    </tbody>
+  </table>
+
+</div>
+  <!-- ページネーションを中央揃えで表示 -->
+
+  <div style="text-align: center;">
+    {{ pagination.links }}
+  </div>
+
+
+    <p></p>
+    <button id="form_set" type="button">セット</button>
+    <button id="delete" type="button">リセット</button>
+
+    
+
+<button type="submit" onClick="return checks();">登録</button>
+</form>
+
+
+
+
+
+</div>
+
+
+
+<!-- <script
+  src="https://code.jquery.com/jquery-3.6.0.min.js"
+  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+  crossorigin="anonymous">
+</script>
+
+
+<script type="text/javascript" src="{{ url_for('static', filename='js/sample.js') }}"></script> -->
+
+<script>
+
+
+function filtering(){
+  const filter_btn = document.querySelector("#filter_test")
+  const submit_test = document.querySelector("#subtest")
+  const order_test = document.querySelector("#order")
+
+  // var boolean = false;
+
+  filter_btn.addEventListener('click', function(){
+    // alert("test");
+    // submit_test.value = "test";
+    console.log(order_test.value);
+
+    // boolean = !boolean
+
+    if (order_test.value == 1){
+      order_test.value = 2;
+    }
+    else{
+      order_test.value = 1;
+    }
+    
+    submit_test.onchange();
+    
+  })
+}
+
+filtering();
+
+
+
+</script>
+
+</body>
+</html>

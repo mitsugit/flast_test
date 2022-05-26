@@ -3,10 +3,12 @@
 
     <table>
     <tr>
-        <th>選択</th>
+        <th><input type="checkbox" id="checkall" ></th>
         <th>first_name</th>
         <th>last_name</th>
     </tr>
+
+        <input id="test" value="{{test_list}}">
 
 {% if datas %}
 
@@ -15,7 +17,7 @@
 
 
     <tr>
-        <td><input type="checkbox" value="{{ data.get('index') }}"></td>
+        <td><input type="checkbox" name="checkbox" value="{{ data.get('index') }}"></td>
         <td>{{ data.get('first_name') }}</td>
 
         <td>{{ data.get('last_name') }}</td>
@@ -29,4 +31,96 @@
 
             </table>
 
+<script>
 
+const checkbox = document.querySelectorAll('[name="checkbox"]')
+
+function save_local(){
+    for (let item of checkbox) {
+	    item.addEventListener('change', function () {
+        const stname = "checkbox" + item.value
+        sessionStorage.setItem(stname,item.checked)
+			// document.querySelector('#output').innerHTML = `${item.value} : ${item.checked}`;
+		});
+}
+}
+
+
+// 3.sessionストレージにある値をフォームに渡す。
+function display_to_form(){
+console.log("testtttt");
+for(let item of checkbox){
+// stname: ex.  checkbox1, checkbox2, checkbox3
+const stname = "checkbox" + item.value;
+console.log(stname);
+
+let bool = sessionStorage.getItem(stname)
+if(bool == "false") bool = false // 文字列の"false"をfalseに直す
+item.checked = bool // checkedに文字列が渡されるとチェックマークが付く
+}
+
+}
+
+
+save_local();
+
+    function check_session(trueOrFalse){
+
+    let x = document.getElementById('test');
+    x = x.value;
+    console.log(x);
+    console.log(typeof(x));
+    // z = x.replace('[','');
+    // z = z.replace(']','');
+    // []を削除
+    console.log('ppp')
+
+    z = x.replace('[','').replace(']','');
+    console.log(z);
+    // カンマ・空白削除
+    z = z.replace(/\'/g,'').replace(/ /g,'');
+    
+    console.log(z);
+
+    // 配列にする。
+    s = z.split(',');
+    console.log(s);
+
+    // 該当のsession keyをture,false切替
+    for (i in s){
+        target = 'checkbox'+ s[i];
+        console.log(target);
+        sessionStorage.setItem(target,trueOrFalse);
+    }
+
+    }
+
+    check_session();
+
+
+function checke_all(){
+    let p = document.getElementById('checkall');
+    p.addEventListener('change',function(){
+        let trueOrFalse = p.checked;
+        console.log(trueOrFalse);
+        if (trueOrFalse){
+            console.log('allcheck');
+            check_session(true);
+        }
+        else{
+            console.log('alluncheck');
+            check_session(false);
+        }
+        display_to_form();
+    })
+    
+}
+checke_all();
+
+
+
+
+
+
+
+</script>

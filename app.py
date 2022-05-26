@@ -40,6 +40,18 @@ def get_person(index):
             cursor.execute(SELECT_ALL_PERSON)
             return cursor.fetchall()
 
+    elif index == '1':
+        query = "SELECT * FROM person order by index"
+        cursor = connection.cursor()
+        cursor.execute(query)
+        return cursor.fetchall()
+
+    elif index == '2':
+        query = "SELECT * FROM person order by index DESC"
+        cursor = connection.cursor()
+        cursor.execute(query)
+        return cursor.fetchall()
+
     else:
         with connection:
             cursor = connection.cursor()
@@ -69,7 +81,9 @@ def test():
 
     title = 'test ： 新規作成'
 
-    return render_template('test.html', title=title, datas=datas)
+    test_list = ['1', '2', '3']
+
+    return render_template('test.html', title=title, datas=datas, test_list=test_list)
 
 
 @app.route('/pagination_test')
@@ -89,7 +103,7 @@ def pagination():
     # total:すべてのレコード件数
     # per_page:1ページに表示させるレコードの件数
     # css_framework:CSSフレームワーク（bootstrap,foundation,semantic,bulmaに対応）
-    pagination = Pagination(page=page, total=len(datas),  per_page=50, css_framework='semantic')
+    pagination = Pagination(page=page, total=len(datas),  per_page=50, css_framework='bootstrap5')
 
     return render_template('paginate-sample.html', rows=rows, pagination=pagination)
 
@@ -151,15 +165,9 @@ def checkbox_page():
     datas = sorted(datas, key=lambda x: x['index'])
     page = request.args.get(get_page_parameter(), type=int, default=1)
     rows = datas[(page - 1)*10: page*10]
-    pagination = Pagination(page=page, total=len(datas),  per_page=10, css_framework='semantic')
+    pagination = Pagination(page=page, total=len(datas),  per_page=10, css_framework='bootstrap5')
 
     return render_template('checkbox_test.html', rows=rows, pagination=pagination)
-
-
-
-
-
-
 
 # 挿入
 def add_movie(title):
@@ -167,6 +175,62 @@ def add_movie(title):
     with connection:
         with connection.cursor() as cursor:
             cursor.execute(INSERT_MOVIE, (title, release_timestamp))
+
+
+@app.route('/filter_test', methods=['GET'])
+def filtering():
+    
+    if request.args.get('ordertest'):
+        order = request.args.get('order')
+        print(order)
+        records = get_person(order)
+    else:
+        order='1'
+        records = get_person('')
+    datas = [dict(zip(person_columns, data)) for data in records]
+    # datas = sorted(datas, key=lambda x: x['index'])
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    rows = datas[(page - 1)*10: page*10]
+    pagination = Pagination(page=page, total=len(datas),  per_page=10, css_framework='bootstrap5')
+    
+    return render_template('filter_test.html',rows=rows, pagination=pagination,order=order)
+
+
+@app.route('/jquery_test', methods=['GET'])
+def jqtest():
+    
+    if request.args.get('ordertest'):
+        order = request.args.get('order')
+        print(order)
+        records = get_person(order)
+    else:
+        order='1'
+        records = get_person('')
+    datas = [dict(zip(person_columns, data)) for data in records]
+    # datas = sorted(datas, key=lambda x: x['index'])
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    rows = datas[(page - 1)*10: page*10]
+    pagination = Pagination(page=page, total=len(datas),  per_page=10, css_framework='bootstrap5')
+    
+    return render_template('jquery_test.html',rows=rows, pagination=pagination,order=order)
+
+
+@app.route('/capsule_test', methods=['GET'])
+def capsule():
+    if request.args.get('ordertest'):
+        order = request.args.get('order')
+        print(order)
+        records = get_person(order)
+    else:
+        order = '1'
+        records = get_person('')
+    datas = [dict(zip(person_columns, data)) for data in records]
+    # datas = sorted(datas, key=lambda x: x['index'])
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    rows = datas[(page - 1) * 10: page * 10]
+    pagination = Pagination(page=page, total=len(datas), per_page=10, css_framework='bootstrap5')
+
+    return render_template('capsule_test.html', rows=rows, pagination=pagination, order=order)
 
 
 # アプリケーションの起動
