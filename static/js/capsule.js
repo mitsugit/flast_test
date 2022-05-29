@@ -20,6 +20,7 @@ const mailCommonModule = (() => {
         },
 
         displayForm: () => {
+            
             $('.checkbox').each(function(){
                 var v = $(this).val();
                 const stname = "checkbox" + v;
@@ -41,35 +42,22 @@ const mailCommonModule = (() => {
             }
             $('#output').val(local_checked_list);
         },
-        // 3.session削除
+        // 3.session false
         delete_storage: () => {
-            sessionStorage.clear();
+            for( var key in sessionStorage ){
+                console.log(key)
+                sessionStorage.setItem(key,false)
+                }
+            
+            $('.checkbox').each(function(){
+                $(this).prop('checked', false);
+            })
+
             $("#output").value = "";
             // チェックボックスに反映
         }
-
-
-
     }
 })();
-
-
-const testModule = (() => {
-    let counter = 0;
-    return {
-        countUp: () => {
-            // カプセル化することで該当のdomがなくてもjs読込時にエラーにならないメリット。
-            document.getElementById("hogehoge").value = "";
-            counter += 1
-            console.log("現在のカウントは", counter)
-        },
-        selectMenu: () => {
-           
-            console.log("testModuleのヘッダーのメニューが選択されました！")
-        }
-    }
-})();
-
 
 
 // イベント定義はここに
@@ -81,4 +69,5 @@ $("#set").click(function() {
 });
 $('#deletebtn').click(function(){
     mailCommonModule.delete_storage();
+    mailCommonModule.displayForm();
 });
